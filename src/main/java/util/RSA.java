@@ -21,11 +21,11 @@ public class RSA {
   }
 
   public RSAPublicKey parsePublicKey(String key) throws Exception {
-    return (RSAPublicKey) keyFactory.generatePublic(new X509EncodedKeySpec(parsePEM(key)));
+    return (RSAPublicKey) keyFactory.generatePublic(new X509EncodedKeySpec(Base64.decode(key)));
   }
 
   public RSAPrivateKey parsePrivateKey(String key) throws Exception {
-    return (RSAPrivateKey) keyFactory.generatePrivate(new PKCS8EncodedKeySpec(parsePEM(key)));
+    return (RSAPrivateKey) keyFactory.generatePrivate(new PKCS8EncodedKeySpec(Base64.decode(key)));
   }
 
   public byte[] encrypt(Key key, byte[] data) throws Exception {
@@ -36,18 +36,5 @@ public class RSA {
   public byte[] decrypt(Key key, byte[] data) throws Exception {
     cipher.init(Cipher.DECRYPT_MODE, key);
     return cipher.doFinal(data);
-  }
-
-  private byte[] parsePEM(String pem) {
-    return Base64.decode(cleanUpPEM(pem));
-  }
-
-  private String cleanUpPEM(String pem) {
-    return pem
-      .replace("-----BEGIN PUBLIC KEY-----", "")
-      .replace("-----END PUBLIC KEY-----", "")
-      .replace("-----BEGIN RSA PRIVATE KEY-----", "")
-      .replace("-----END RSA PRIVATE KEY-----", "")
-      .replace("\n", "");
   }
 }
