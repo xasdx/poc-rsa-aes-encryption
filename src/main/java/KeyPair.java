@@ -1,5 +1,6 @@
-package util;
-
+/**
+ * Base64 encoded, asymmetric key-pair.
+ */
 public class KeyPair {
 
   private final String privateKey;
